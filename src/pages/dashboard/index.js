@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Header from '@/components/ui/Header';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -11,18 +13,35 @@ const DashboardHome = ({ initialData }) => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [searchQuery, setSearchQuery] = useState('');
 
+    const router = useRouter()
+
     useEffect(() => {
         fetchData();
     }, [sortBy, sortOrder, searchQuery]);
 
 
     const fetchData = () => {
+
+        const token = localStorage.getItem("token")
+        if (!token) {
+            router.replace('/auth/login');
+            return;
+        }
+
         const url = `http://localhost:5000/users?sort=${sortBy}&order=${sortOrder}&search=${searchQuery}`;
-        fetch(url)
+        fetch(url, {
+            headers: {
+                Authorization: token
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 console.log(data);
                 setData(data.data);
+                // setData(prevData => [...prevData, data?.data]);
+            }).catch(error => {
+                console.log(error)
+                router.replace("/auth/login")
             });
     };
 
@@ -76,6 +95,26 @@ const DashboardHome = ({ initialData }) => {
     };
 
 
+    const handleUpload = async (event) => {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append('file', event.target.file.files[0]);
+    
+        try {
+          const response = await fetch('http://localhost:5000/users', {
+            method: 'POST',
+            body: formData,
+          });
+          const result = await response.text();
+          console.log(result);
+          toast.success('File uploaded successfully.');
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          toast.error('Failed to upload file.');
+        }
+      };
+    
+
     return (
         <div>
             <Header></Header>
@@ -83,7 +122,7 @@ const DashboardHome = ({ initialData }) => {
                 <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                     <ul class="space-y-2 font-medium">
                         <li>
-                            <Link href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group mt-20">
+                            <Link href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ">
                                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                     <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
                                 </svg>
@@ -96,17 +135,28 @@ const DashboardHome = ({ initialData }) => {
             </aside>
 
             <div class="p-4 sm:ml-64 mt-20">
-                <form action="/users" method="post" enctype="multipart/form-data" className='flex justify-between'>
+                <div className='flex justify-between'>
+                    <form action="">
+                        <input type="text" value={searchQuery} onChange={handleSearch} placeholder="Search user" className='input input-bordered w-full max-w-xs' />
+                    </form>
 
-                    <input type="text" value={searchQuery} onChange={handleSearch} placeholder="Search user" className='input input-bordered w-full max-w-xs' />
+                    {/* Upload file */}
+                    {/* <form action="http://localhost:5000/users" method="post" enctype="multipart/form-data" >
 
-                    <div>
                         <input type="file" name="file" id="file" accept=".csv, .xlsx, .xls" />
                         <button className='btn btn-sm' type="submit">Upload Users</button>
+                    </form> */}
 
-                    </div>
 
-                </form>
+                    <form onSubmit={handleUpload}>
+                        <input type="file" name="file" id="file" accept=".csv, .xlsx, .xls" />
+                        <button className="btn btn-sm" type="submit">
+                            Upload Users
+                        </button>
+                    </form>
+
+
+                </div>
                 <div>
                     <div className="overflow-x-auto mt-12">
                         <table className="table table-zebra w-full">
@@ -119,8 +169,10 @@ const DashboardHome = ({ initialData }) => {
                                     <th>Gender</th>
                                     <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
+
 
                             <tbody className='text-gray-700'>
                                 {data?.map((d, index) =>
@@ -144,8 +196,13 @@ const DashboardHome = ({ initialData }) => {
 
 export async function getServerSideProps() {
     try {
+        const token = localStorage.getItem("token")
         const url = `http://localhost:5000/users`;
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            headers: {
+                Authorization: token
+            }
+        });
         const data = await res.json();
 
         return {

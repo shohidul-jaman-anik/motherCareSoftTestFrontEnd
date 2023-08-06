@@ -27,7 +27,7 @@ const register = () => {
             .then(result => {
                 console.log("result", result)
                 toast.success("Account Successfully Created")
-                router.push("/dashboard")
+                router.push("/auth/login")
 
             }).catch(error => {
                 console.log(error)

@@ -32,11 +32,11 @@ const Header = () => {
 
                             <div className="flex space-x-4">
                                 <Link href='/'>
-                                    <h1 className="text-white text-2xl font-semibold" >Mother Care</h1>
+                                    <h1 className="text-white text-2xl font-bold text-cyan-500" >Mother Care</h1>
                                 </Link>
-                                <Link href="/" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</Link>
+                                <Link href="/" className="btn btn-sm" aria-current="page">Home</Link>
 
-                                <Link href="/dashboard" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</Link>
+                                <Link href="/dashboard" className="btn btn-sm ">Dashboard</Link>
                             </div>
                         </div>
                     </div>
