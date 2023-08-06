@@ -5,14 +5,40 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import loginImg from "../../assets/Sign in-pana.svg";
+import { toast } from "react-toastify";
+import { useRouter } from 'next/router';
 
 const login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
+    const router =useRouter()
     // const navigate = useNavigate()
 
     const onSubmit = (data) => {
         console.log(data)
+        fetch(`http://localhost:5000/login`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    localStorage.setItem("token", result.token)
+                    console.log("result", result)
+                    router.push("/dashboard")
+                } else {
+                    toast.error(result.message)
+                    router.push("/auth/login")
+                }
+
+            }).catch(error => {
+                console.log(error)
+                toast.error(error.message)
+                router.push("/auth/login")
+            })
     };
     return (
         <div>
@@ -23,7 +49,7 @@ const login = () => {
             <div className={style.loginContainer}>
 
                 <div>
-                    {/* <img className='login-img ' src={loginImg} alt="" /> */}
+                    
                     <Image src={loginImg}
                         className='login-img '
                         alt="img2" width={450} height={420} layout="responsive" />

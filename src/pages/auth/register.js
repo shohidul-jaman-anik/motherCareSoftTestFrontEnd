@@ -5,14 +5,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import registerImg from "../../assets/Sign up-pana.svg";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+
 
 const register = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
-    // const navigate = useNavigate()
+    const router = useRouter()
 
     const onSubmit = async data => {
         console.log(data)
+        fetch(`http://localhost:5000/register`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(result => {
+                console.log("result", result)
+                toast.success("Account Successfully Created")
+                router.push("/dashboard")
+
+            }).catch(error => {
+                console.log(error)
+                router.push("/auth/register")
+                toast.error(error.message)
+            })
     }
     return (
         <div>
@@ -31,7 +52,7 @@ const register = () => {
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <h2 className="text-center text-4xl font-bold mb-8">Sign Up</h2>
-                    
+
                     <div className="lg:ml-40 form-control border-0">
                         <label className="label">
                             <span className="label-text">Email</span>

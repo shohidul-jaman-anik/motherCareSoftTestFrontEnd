@@ -10,7 +10,7 @@ export default function Home() {
     <main>
       <Header></Header>
   
-      <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga est libero beatae totam possimus rerum officia perspiciatis harum, praesentium inventore dolores eligendi suscipit. Dignissimos corrupti velit aspernatur ducimus, sunt suscipit.</h1>
+      <h1 className='mt-20'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga est libero beatae totam possimus rerum officia perspiciatis harum, praesentium inventore dolores eligendi suscipit. Dignissimos corrupti velit aspernatur ducimus, sunt suscipit.</h1>
     </main>
   )
 }

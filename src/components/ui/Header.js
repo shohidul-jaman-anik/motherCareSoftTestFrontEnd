@@ -1,8 +1,16 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import profileImg from "../../assets/profile.svg"
 
 const Header = () => {
+    const handleLogOut = () => {
+        localStorage.removeItem('token');
+        // navigate('/login');
+        // setLoggedOut(true);
+        window.location.reload();
+    }
     return (
-        <nav className="bg-gray-800">
+        <nav className="bg-gray-800 fixed top-0 left-0 right-0 z-50">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className="relative flex items-center justify-between h-16">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -35,42 +43,23 @@ const Header = () => {
 
                     {/* Notification */}
 
-                    <div className="dropdown dropdown-end">
-                        <label tabIndex={0} className=" ">
-                            <div className="indicator">
-                                <svg className="h-8 w-8 bg-white rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                </svg>
-                                {/* <span className="badge badge-sm rounded-full indicator-item text-2xl text-red-500">{notification.noti}</span> */}
-                            </div>
-                        </label>
-                        <div tabIndex={0} className="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow">
-                            {/* <div className="card-body">
-                                <span className="font-bold text-lg text-info">{notification.details} </span>
-                                <span className="">{notification.title}</span>
-                            </div> */}
-                        </div>
-                    </div>
 
 
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+
+                    <div className=" absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
 
                         <div className="dropdown dropdown-end">
                             <label tabIndex="0" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    {/* <img src={profile} alt='' /> */}
+                                    <Image src={profileImg}
+                                        className='login-img '
+                                        alt="img2" width={50} height={50} layout="responsive" />
                                 </div>
                             </label>
                             <ul tabIndex="0" className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-                                <li>
-                                    <Link href="/updateProfile"
-                                        className="justify-between">
-                                        Update Profile
-                                        <span className="badge">New</span>
-                                    </Link>
-                                </li>
-                                {/* <li><Link href="" onClick={handleLogOut}>Logout</Link></li> */}
+                               
+                                <li><Link href="" onClick={handleLogOut}>Logout</Link></li>
                             </ul>
                         </div>
 
