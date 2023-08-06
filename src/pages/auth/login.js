@@ -1,6 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import style from "@/styles/Login.module.css";
+import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import loginImg from "../../assets/Sign in-pana.svg";
 
 const login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
@@ -12,15 +16,22 @@ const login = () => {
     };
     return (
         <div>
-            <div className='loginContainer'>
+            <Head>
+                <title>Login Page</title>
+                <meta name="Login Page" description="Login Mother care" />
+            </Head>
+            <div className={style.loginContainer}>
 
                 <div>
                     {/* <img className='login-img ' src={loginImg} alt="" /> */}
+                    <Image src={loginImg}
+                        className='login-img '
+                        alt="img2" width={450} height={420} layout="responsive" />
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <h2 className="text-center text-4xl font-bold">Login</h2>
 
-                    <div className="lg:ml-16 form-control border-0">
+                    <div className="lg:ml-40 form-control border-0">
                         <label className="label">
                             <span className="label-text">Email</span>
                         </label>
@@ -45,7 +56,7 @@ const login = () => {
                     </div>
 
 
-                    <div className="lg:ml-16 form-control  border-0">
+                    <div className="lg:ml-40 form-control  border-0">
                         <label className="label">
                             <span className="label-text">Password</span>
                         </label>
@@ -73,7 +84,8 @@ const login = () => {
 
                     </div>
 
-                    <input type="submit" className='lg:ml-20 ml-3 form-button text-white ' value="Login" />
+                    <input type="submit" value="Login" className={`${style.formButton} lg:ml-40 ml-3 text-white`} />
+
                     <p className='text-center mt-2'><small>
                         New To Mother Care ?
                         <Link className='text-primary ml-2'
