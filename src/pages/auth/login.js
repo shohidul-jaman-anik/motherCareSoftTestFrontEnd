@@ -3,20 +3,20 @@ import style from "@/styles/Login.module.css";
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import loginImg from "../../assets/Sign in-pana.svg";
-import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { toast } from "react-toastify";
+import loginImg from "../../assets/Sign in-pana.svg";
 
 const login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
 
-    const router =useRouter()
+    const router = useRouter()
     // const navigate = useNavigate()
 
     const onSubmit = (data) => {
         console.log(data)
-        fetch(`http://localhost:5000/login`, {
+        fetch(`https://mother-care-p178.onrender.com/login`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -49,7 +49,7 @@ const login = () => {
             <div className={style.loginContainer}>
 
                 <div>
-                    
+
                     <Image src={loginImg}
                         className='login-img '
                         alt="img2" width={450} height={420} layout="responsive" />

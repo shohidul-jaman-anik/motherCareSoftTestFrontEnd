@@ -3,10 +3,10 @@ import style from "@/styles/Login.module.css";
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import registerImg from "../../assets/Sign up-pana.svg";
 import { useRouter } from "next/router";
+import { useForm } from 'react-hook-form';
 import { toast } from "react-toastify";
+import registerImg from "../../assets/Sign up-pana.svg";
 
 
 const register = () => {
@@ -16,7 +16,7 @@ const register = () => {
 
     const onSubmit = async data => {
         console.log(data)
-        fetch(`http://localhost:5000/register`, {
+        fetch(`https://mother-care-p178.onrender.com/register`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -53,16 +53,16 @@ const register = () => {
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <h2 className="text-center text-4xl font-bold mb-8">Sign Up</h2>
 
+
                     <div className="lg:ml-40 form-control border-0">
                         <label className="label">
-                            <span className="label-text">Email</span>
+                            <span className="label-text">Name</span>
                         </label>
                         <input
-                            type="email"
+                            type="text"
                             placeholder="Enter Your Name"
                             className="input input-bordered input-primary w-full max-w-xs "
-                            // {...register("firstName", { required: true })}
-                            {...register("username", {
+                            {...register("name", {
                                 required: {
                                     value: true,
                                     message: "Name is required"
@@ -74,6 +74,28 @@ const register = () => {
                             {errors.name?.type === 'required' && <span className="label-text-alt text-red-500">{errors.name.message}</span>}
 
 
+                        </label>
+                    </div>
+
+                    <div className="lg:ml-40 form-control border-0">
+                        <label className="label">
+                            <span className="label-text">Email</span>
+                        </label>
+                        <input
+                            type="email"
+                            placeholder="Enter Your Email"
+                            className="input input-bordered input-primary w-full max-w-xs "
+
+                            {...register("email", {
+                                required: {
+                                    value: true,
+                                    message: "Email is required"
+                                },
+
+                            })}
+                        />
+                        <label className="label">
+                            {errors.email?.type === 'required' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
                         </label>
                     </div>
 

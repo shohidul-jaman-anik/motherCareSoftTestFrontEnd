@@ -1,17 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Header from '@/components/ui/Header';
+import style from "@/styles/Login.module.css";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+
 const DashboardHome = ({ initialData }) => {
+
+    const { register, formState: { errors }, handleSubmit } = useForm();
 
     const [data, setData] = useState(initialData);
     const [sortingData, setSortingData] = useState("ASC")
     const [sortBy, setSortBy] = useState('title');
     const [sortOrder, setSortOrder] = useState('asc');
     const [searchQuery, setSearchQuery] = useState('');
+    const [userToUpdate, setUserToUpdate] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const router = useRouter()
 
@@ -28,7 +35,7 @@ const DashboardHome = ({ initialData }) => {
             return;
         }
 
-        const url = `http://localhost:5000/users?sort=${sortBy}&order=${sortOrder}&search=${searchQuery}`;
+        const url = `https://mother-care-p178.onrender.com/users?sort=${sortBy}&order=${sortOrder}&search=${searchQuery}`;
         fetch(url, {
             headers: {
                 Authorization: token
@@ -51,7 +58,7 @@ const DashboardHome = ({ initialData }) => {
         const proceed = window.confirm('Are you sure ?')
 
         if (proceed) {
-            const url = `http://localhost:5000/users/${id}`
+            const url = `https://mother-care-p178.onrender.com/users/${id}`
             fetch(url, {
                 method: "DELETE"
             })
@@ -68,20 +75,47 @@ const DashboardHome = ({ initialData }) => {
     }
 
 
+    // For Update User
+    const onSubmit = async (data) => {
+        if (userToUpdate) {
+            // Merge the new form data with the existing user data
+            const updatedData = { ...userToUpdate, ...data };
+
+            fetch(`https://mother-care-p178.onrender.com/users/${userToUpdate._id}`, {
+                method: "PATCH",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+
+                    toast.success("User Update Successfully");
+
+                    fetchData();
+                    setShowModal(false);
+                })
+                .catch((error) => {
+                    console.error("Error updating user:", error.message);
+                    // Handle the error case here
+                });
+        }
+    };
 
     const sorting = (data1) => {
         let sort;
         if (sortingData === "ASC") {
             sort = [...data].sort((a, b) => {
-                const aValue = a[data1]?.toLocaleLowerCase() || ''; // Handle undefined or null
-                const bValue = b[data1]?.toLocaleLowerCase() || ''; // Handle undefined or null
+                const aValue = a[data1]?.toLocaleLowerCase() || '';
+                const bValue = b[data1]?.toLocaleLowerCase() || '';
                 return aValue > bValue ? 1 : -1;
             });
             setSortingData("DSC");
         } else {
             sort = [...data].sort((a, b) => {
-                const aValue = a[data1]?.toLocaleLowerCase() || ''; // Handle undefined or null
-                const bValue = b[data1]?.toLocaleLowerCase() || ''; // Handle undefined or null
+                const aValue = a[data1]?.toLocaleLowerCase() || '';
+                const bValue = b[data1]?.toLocaleLowerCase() || '';
                 return aValue < bValue ? 1 : -1;
             });
             setSortingData("ASC");
@@ -90,30 +124,42 @@ const DashboardHome = ({ initialData }) => {
     };
 
 
+    // For Search user
     const handleSearch = event => {
         setSearchQuery(event.target.value);
     };
 
 
+    // For File uplod
     const handleUpload = async (event) => {
         event.preventDefault();
         const formData = new FormData();
         formData.append('file', event.target.file.files[0]);
-    
+
         try {
-          const response = await fetch('http://localhost:5000/users', {
-            method: 'POST',
-            body: formData,
-          });
-          const result = await response.text();
-          console.log(result);
-          toast.success('File uploaded successfully.');
+            const response = await fetch('https://mother-care-p178.onrender.com/users', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await response.text();
+            console.log(result);
+            toast.success('File uploaded successfully.');
         } catch (error) {
-          console.error('Error uploading file:', error);
-          toast.error('Failed to upload file.');
+            console.error('Error uploading file:', error);
+            toast.error('Failed to upload file.');
         }
-      };
-    
+    };
+
+
+
+    const handleUpdateClick = (user) => {
+        setUserToUpdate(user);
+        window.updateUserModal.showModal();
+        setShowModal(true);
+    };
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
 
     return (
         <div>
@@ -135,17 +181,79 @@ const DashboardHome = ({ initialData }) => {
             </aside>
 
             <div class="p-4 sm:ml-64 mt-20">
+
+
+                <dialog id="updateUserModal" className="modal">
+                    <form method="dialog" onSubmit={handleSubmit(onSubmit)} className="modal-box ">
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={handleCloseModal}>✕</button>
+
+
+                        <div className="lg:ml-20 form-control border-0">
+                            <label className="label">
+                                <span className="label-text">Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Enter Name"
+                                className="input input-bordered input-primary w-full max-w-xs "
+                                {...register("name")}
+                            />
+                        </div>
+                        <div className="lg:ml-20 form-control border-0">
+                            <label className="label">
+                                <span className="label-text">Age</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Enter Age"
+                                className="input input-bordered input-primary w-full max-w-xs "
+                                {...register("age")}
+                            />
+                        </div>
+                        <div className="lg:ml-20 form-control border-0">
+                            <label className="label">
+                                <span className="label-text">Gender</span>
+                            </label>
+                            <select
+                                className="select select-bordered select-primary w-full max-w-xs"
+                                {...register("gender")}
+                            >
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div className="lg:ml-20 form-control border-0">
+                            <label className="label">
+                                <span className="label-text">Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="Enter E-mail"
+                                className="input input-bordered input-primary w-full max-w-xs "
+                                {...register("email")}
+                            />
+                        </div>
+                        <div className="lg:ml-20 form-control border-0">
+                            <label className="label">
+                                <span className="label-text">Phone</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Enter Phone Number"
+                                className="input input-bordered input-primary w-full max-w-xs "
+                                {...register("phone")}
+                            />
+                        </div>
+                        <input type="submit" className={`${style.formButton} lg:ml-20 mt-5 ml-3 text-white`} value="Update" />
+                    </form>
+                </dialog>
+
+
+
                 <div className='flex justify-between'>
                     <form action="">
                         <input type="text" value={searchQuery} onChange={handleSearch} placeholder="Search user" className='input input-bordered w-full max-w-xs' />
                     </form>
-
-                    {/* Upload file */}
-                    {/* <form action="http://localhost:5000/users" method="post" enctype="multipart/form-data" >
-
-                        <input type="file" name="file" id="file" accept=".csv, .xlsx, .xls" />
-                        <button className='btn btn-sm' type="submit">Upload Users</button>
-                    </form> */}
 
 
                     <form onSubmit={handleUpload}>
@@ -169,6 +277,7 @@ const DashboardHome = ({ initialData }) => {
                                     <th>Gender</th>
                                     <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Update</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -177,27 +286,36 @@ const DashboardHome = ({ initialData }) => {
                             <tbody className='text-gray-700'>
                                 {data?.map((d, index) =>
                                     <tr key={d._id}>
-                                        <th>{index + 1}</th>
-                                        <th>{d.name}</th>
-                                        <th>{d.age}</th>
+                                        <td>{index + 1}</td>
+                                        <td>{d.name}</td>
+                                        <td>{d.age}</td>
                                         <td>{d.gender}</td>
                                         <td>{d.email}</td>
                                         <td>{d.phone}</td>
+                                        <td onClick={() => handleUpdateClick(d)}>✍Update</td>
+
+
                                         <td onClick={() => handleDelete(d._id)}> ❌ </td>
                                     </tr>)}
+
                             </tbody>
+
                         </table>
                     </div>
+
+
                 </div>
+
             </div>
         </div>
     );
 };
 
+
 export async function getServerSideProps() {
     try {
         const token = localStorage.getItem("token")
-        const url = `http://localhost:5000/users`;
+        const url = `https://mother-care-p178.onrender.com/users`;
         const res = await fetch(url, {
             headers: {
                 Authorization: token
@@ -207,19 +325,19 @@ export async function getServerSideProps() {
 
         return {
             props: {
-                initialData: data.data || [], // Set to an empty array if data.data is undefined or null
+                initialData: data.data || [],
             },
         };
     } catch (error) {
         console.error("Error fetching data:", error);
         return {
             props: {
-                initialData: null, // Set to null or an empty array, depending on what works for your frontend
+                initialData: null,
             },
         };
     }
 }
 
 
-
 export default DashboardHome;
+
