@@ -19,12 +19,13 @@ const DashboardHome = ({ initialData }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [userToUpdate, setUserToUpdate] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [cacheBuster, setCacheBuster] = useState(0);
 
     const router = useRouter()
 
     useEffect(() => {
         fetchData();
-    }, [sortBy, sortOrder, searchQuery]);
+    }, [sortBy, sortOrder, searchQuery, cacheBuster]);
 
 
     const fetchData = () => {
@@ -51,7 +52,9 @@ const DashboardHome = ({ initialData }) => {
                 router.replace("/auth/login")
             });
     };
-
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
 
     const handleDelete = id => {
         console.log(id)
@@ -144,6 +147,10 @@ const DashboardHome = ({ initialData }) => {
             const result = await response.text();
             console.log(result);
             toast.success('File uploaded successfully.');
+
+            setCacheBuster(prevBuster => prevBuster + 1);
+
+            // fetchData();
         } catch (error) {
             console.error('Error uploading file:', error);
             toast.error('Failed to upload file.');
@@ -157,9 +164,7 @@ const DashboardHome = ({ initialData }) => {
         window.updateUserModal.showModal();
         setShowModal(true);
     };
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
+
 
     return (
         <div>
@@ -270,7 +275,7 @@ const DashboardHome = ({ initialData }) => {
                         <table className="table table-zebra w-full">
                             <thead>
                                 <tr className='text-lg text-slate-900'>
-                                    <th></th>
+                                    <th>Sl</th>
                                     <th >Name</th>
                                     <th onClick={() => sorting('age')}>Age <span className='text-red-500'>( sort )</span></th>
 
