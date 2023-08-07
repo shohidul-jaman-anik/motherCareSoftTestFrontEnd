@@ -62,13 +62,7 @@ const register = () => {
                             type="text"
                             placeholder="Enter Your Name"
                             className="input input-bordered input-primary w-full max-w-xs "
-                            {...register("username", {
-                                required: {
-                                    value: true,
-                                    message: "Name is required"
-                                },
-
-                            })}
+                            {...register("name")}
                         />
                         <label className="label">
                             {errors.name?.type === 'required' && <span className="label-text-alt text-red-500">{errors.name.message}</span>}
@@ -86,7 +80,7 @@ const register = () => {
                             placeholder="Enter Your Email"
                             className="input input-bordered input-primary w-full max-w-xs "
 
-                            {...register("name", {
+                            {...register("username", {
                                 required: {
                                     value: true,
                                     message: "Email is required"
@@ -95,7 +89,7 @@ const register = () => {
                             })}
                         />
                         <label className="label">
-                            {errors.email?.type === 'required' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
+                            {errors.username?.type === 'required' && <span className="label-text-alt text-red-500">{errors.username.message}</span>}
                         </label>
                     </div>
 
