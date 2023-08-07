@@ -62,7 +62,7 @@ const register = () => {
                             type="text"
                             placeholder="Enter Your Name"
                             className="input input-bordered input-primary w-full max-w-xs "
-                            {...register("name", {
+                            {...register("username", {
                                 required: {
                                     value: true,
                                     message: "Name is required"
@@ -86,7 +86,7 @@ const register = () => {
                             placeholder="Enter Your Email"
                             className="input input-bordered input-primary w-full max-w-xs "
 
-                            {...register("email", {
+                            {...register("name", {
                                 required: {
                                     value: true,
                                     message: "Email is required"
