@@ -54,7 +54,7 @@ const register = () => {
                     <h2 className="text-center text-4xl font-bold mb-8">Sign Up</h2>
 
 
-                    <div className="lg:ml-40 form-control border-0">
+                    {/* <div className="lg:ml-40 form-control border-0">
                         <label className="label">
                             <span className="label-text">Name</span>
                         </label>
@@ -69,7 +69,7 @@ const register = () => {
 
 
                         </label>
-                    </div>
+                    </div> */}
 
                     <div className="lg:ml-40 form-control border-0">
                         <label className="label">
