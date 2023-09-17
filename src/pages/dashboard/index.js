@@ -30,26 +30,25 @@ const DashboardHome = ({ initialData }) => {
 
     const fetchData = () => {
 
-        const token = localStorage.getItem("token")
-        if (!token) {
-            router.replace('/auth/login');
-            return;
-        }
+        // const token = localStorage.getItem("token")
+        // if (!token) {
+        //     router.replace('/auth/login');
+        //     return;
+        // }
 
-        const url = `https://mother-care-p178.onrender.com/users?sort=${sortBy}&order=${sortOrder}&search=${searchQuery}`;
+        const url = `http://localhost:5000/users?sort=${sortBy}&order=${sortOrder}&search=${searchQuery}`;
         fetch(url, {
-            headers: {
-                Authorization: token
-            }
+            // headers: {
+            //     Authorization: token
+            // }
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
-                setData(data.data);
-                // setData(prevData => [...prevData, data?.data]);
+                // console.log(data);
+                // setData(data.data);
             }).catch(error => {
-                console.log(error)
-                router.replace("/auth/login")
+                // console.log(error)
+                // router.replace("/auth/login")
             });
     };
     const handleCloseModal = () => {
@@ -62,7 +61,7 @@ const DashboardHome = ({ initialData }) => {
         const proceed = window.confirm('Are you sure ?')
 
         if (proceed) {
-            const url = `https://mother-care-p178.onrender.com/users/${id}`
+            const url = `http://localhost:5000/users/${id}`
             fetch(url, {
                 method: "DELETE"
             })
@@ -82,7 +81,7 @@ const DashboardHome = ({ initialData }) => {
     // For Update User
     const onSubmit = async (data) => {
 
-        fetch(`https://mother-care-p178.onrender.com/users/${userToUpdate._id}`, {
+        fetch(`http://localhost:5000/users/${userToUpdate._id}`, {
             method: "PATCH",
             headers: {
                 "content-type": "application/json",
@@ -102,7 +101,6 @@ const DashboardHome = ({ initialData }) => {
                 console.error("Error updating user:", error.message);
                 // Handle the error case here
             });
-
     };
 
     const sorting = (data1) => {
@@ -140,7 +138,7 @@ const DashboardHome = ({ initialData }) => {
         formData.append('file', event.target.file.files[0]);
 
         try {
-            const response = await fetch('https://mother-care-p178.onrender.com/users', {
+            const response = await fetch('http://localhost:5000/users', {
                 method: 'POST',
                 body: formData,
             });
@@ -307,10 +305,7 @@ const DashboardHome = ({ initialData }) => {
 
                         </table>
                     </div>
-
-
                 </div>
-
             </div>
         </div>
     );
@@ -319,12 +314,12 @@ const DashboardHome = ({ initialData }) => {
 
 export async function getServerSideProps() {
     try {
-        const token = localStorage.getItem("token")
+        // const token = localStorage.getItem("token")
         const url = `https://mother-care-p178.onrender.com/users`;
         const res = await fetch(url, {
-            headers: {
-                Authorization: token
-            }
+            // headers: {
+            //     Authorization: token
+            // }
         });
         const data = await res.json();
 

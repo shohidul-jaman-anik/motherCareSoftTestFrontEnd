@@ -16,7 +16,7 @@ const login = () => {
 
     const onSubmit = (data) => {
         console.log(data)
-        fetch(`https://mother-care-p178.onrender.com/login`, {
+        fetch(`http://localhost:5000/login`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -25,19 +25,19 @@ const login = () => {
         })
             .then(res => res.json())
             .then(result => {
-                if (result.success) {
-                    localStorage.setItem("token", result.token)
-                    console.log("result", result)
-                    router.push("/dashboard")
-                } else {
-                    toast.error(result.message)
-                    router.push("/auth/login")
-                }
+                // if (result.success) {
+                //     localStorage.setItem("token", result.token)
+                //     console.log("result", result)
+                //     router.push("/dashboard")
+                // } else {
+                //     toast.error(result.message)
+                //     router.push("/auth/login")
+                // }
 
             }).catch(error => {
-                console.log(error)
-                toast.error(error.message)
-                router.push("/auth/login")
+                // console.log(error)
+                // toast.error(error.message)
+                // router.push("/auth/login")
             })
     };
     return (

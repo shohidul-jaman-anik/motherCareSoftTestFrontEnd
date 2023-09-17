@@ -16,7 +16,7 @@ const register = () => {
 
     const onSubmit = async data => {
         console.log(data)
-        fetch(`https://mother-care-p178.onrender.com/register`, {
+        fetch(`http://localhost:5000/register`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"

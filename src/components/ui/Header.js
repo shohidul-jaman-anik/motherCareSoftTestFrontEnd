@@ -32,7 +32,7 @@ const Header = () => {
 
                             <div className="flex space-x-4">
                                 <Link href='/'>
-                                    <h1 className="text-white text-2xl font-bold text-cyan-500" >Mother Care</h1>
+                                    <h1 className="text-white text-2xl font-bold text-cyan-500" >Ad-din Pharmacetucale Ltd</h1>
                                 </Link>
                                 <Link href="/" className="btn btn-sm" aria-current="page">Home</Link>
 

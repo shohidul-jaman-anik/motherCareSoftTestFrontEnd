@@ -10,7 +10,7 @@ export default function Home() {
     <main>
       <Header></Header>
   
-      <h1 className='text-center text-3xl mt-40'>Welcome to Mother Care </h1>
+      <h1 className='text-center text-3xl mt-40'>Welcome to Ad-din Pharmacetucale Ltd</h1>
     </main>
   )
 }
